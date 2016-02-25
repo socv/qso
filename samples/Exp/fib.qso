@@ -1,0 +1,17 @@
+#!/usr/bin/env qso
+
+cout << fib1(5) << endl
+
+our fib1 = { |x|
+   (x <= 1).if(
+     { 1 }
+     { fib1(x - 1) + fib1(x - 2) }
+   )
+}
+
+block fib2 { |x|
+   (x <= 1).if({ return 1 })
+   fib2(x - 1) + fib2(x - 2)
+}
+
+

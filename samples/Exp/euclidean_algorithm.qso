@@ -1,0 +1,9 @@
+
+function euclidean_algorithm { |m,n|
+   (m >= n) or m.swap(n)
+
+   (n == 0).if(
+     { m }
+     { euclidean_algorithm(n, m % n) }
+   )
+}
