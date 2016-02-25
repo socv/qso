@@ -1,0 +1,34 @@
+class ::Setup::Trac::Install::Install_109 {
+   base(Setup)
+
+   method process {
+      ($.uid > 0) or Exception::Misc("rootダメ").throw;
+      depend("Setup::System::Yum");
+      uninstall_rpm("trac*")
+      install_rpm(
+        "mod_python"
+        "python"            => %[ min_version => "2.5" ]
+        "python-setuptools" => %[ min_version => "0.6" ]
+        "python-genshi06"   => %[ min_version => "0.6" ]
+        "python-babel",
+        "python-docutil"    => %[ min_version => "0.3.9" ]
+        "enscript"
+      )
+
+      my name_and_version = "Trac-1.0.9"
+      my package_name = name_and_version ~ ".tar.gz"
+
+      File("~/Install").must_dir.chdir
+      my uri = "http://download.edgewall.org/trac/" ~ package_name
+
+      File("trac").must_dir.chdir
+      File(package_name).must_reg{ system("wget", uri) }
+      File(name_and_version).must_dir{system("tar", "zxf", package_name) }.chdir
+
+      my last_target = File("/usr/lib/python2.6/site-packages/%s-py2.6.egg/" % [name_and_version])
+
+      last_target.must_dir{ system_sudo("python ./setup.py install") }
+
+
+   }
+}
