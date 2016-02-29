@@ -1,0 +1,11 @@
+my x = 0
+if(true) { x = 1 } { x = 0 }
+ok: x == 1
+
+x = 0
+true.if { x = 1 }
+ok: x == 1
+
+x = 0
+true and x = 1
+ok: x == 1

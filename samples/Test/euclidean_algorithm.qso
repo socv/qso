@@ -1,6 +1,6 @@
 
-function euclidean_algorithm { |m,n|
-   (m >= n) or m.swap(n)
+function euclidean_algorithm { |m@Int,n@Int|
+   (m >= n) or swap(m, n)
 
    (n == 0).if(
      { m }
