@@ -7,3 +7,6 @@ function euclidean_algorithm { |m,n|
      { euclidean_algorithm(n, m % n) }
    )
 }
+
+ok: euclidean_algorithm(15, 12) == 3
+ok: euclidean_algorithm(2000, 2048) == 16
