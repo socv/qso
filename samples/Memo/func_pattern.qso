@@ -1,0 +1,7 @@
+
+my add2 = block @Int {|a,b| a+b }
+our add2 = {|a,b| a+b }
+block add2 {|a @Int,b @Int| a+b }
+block add2 (a @Int, b @Int) { a+b }
+block add2 (a @Int, b @Int) @Int { a+b }
+
