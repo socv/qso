@@ -1,0 +1,14 @@
+
+my s1 = "abcd"
+my s2 = re("bc").to("BC").replace(s1);
+ok: s1 == "abcd"
+ok: s2 == "aBCd"
+
+my result = re("bc").to("BC").s(s1)
+ok: result
+ok: result.range(0).begin == 1
+ok: result.range(0).length == 2
+ok: result.begin == 1
+ok: result.length == 2
+ok: s1 = "aBCd"
+
