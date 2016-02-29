@@ -1,0 +1,24 @@
+#!/usr/bin/env qso
+
+function human_readable (x @Float, n @Int = 4, k @Float = 1000.0) @String {
+   my sign = (x < 0).if({ x = -x;  "-" }, { "" })
+   my u = Case(x)
+   .when({ _ > k**3 }, { x /= k**3; "G" })
+   .when({ _ > k**2 }, { x /= k**2; "M" })
+   .when({ _ > k**1 }, { x /= k**1; "k" })
+   .else({ "" })
+
+   o = floor(log(x, 10)) - (n - 1)
+   x /= 10**o
+   x = floor(x + 0.5)
+   x *= 10**o
+   sign ~ x.to_str ~ u
+}
+
+ok: human_readable(      987) == "987"
+ok: human_readable(     9876) == "9.876k"
+ok: human_readable(    98765) == "98.77k"
+ok: human_readable(   987654) == "987.7k"
+ok: human_readable(  9876543) == "9.877M"
+ok: human_readable( 98765432) == "98.77M"
+ok: human_readable(987654321) == "987.7M"
