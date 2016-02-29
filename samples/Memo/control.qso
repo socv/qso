@@ -1,0 +1,23 @@
+# while や if の構文を自分で作成
+my while = { |cond_block, true_block|
+   cond_block and true_block or return false;
+   CORE::loop {
+      my f = (cond_block)()
+      f.to_bool.unless({ last; })
+      (run_block)()
+   }
+};
+
+my if = { |cond_expr,true_block|
+   cond_expr.to_bool.if(true_block)
+}
+
+
+# sample
+if(a < 10) {
+   block1();
+}
+
+while({ i < 10 }) {
+   i++;
+}
