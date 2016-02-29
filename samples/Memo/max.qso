@@ -1,0 +1,25 @@
+
+class Array {
+   method max { | start => [Int,0], end => [Int,size] |
+      my n = end - start;
+      my m = start + n / 2;
+      if(n == 0) { return }
+      if(n == 1) { return self[start] }
+      if(n == 2) {
+         my a = max(start, m)
+         my b = max(m, end)
+         return (a < b).if(a, b)
+      }
+   }
+
+   method max2 {
+      my largest = self[0]
+      self[1..(size-1)].each { |i|
+         if(i > largest) { largest = i }
+      }
+      return largest
+   }
+}
+
+
+
