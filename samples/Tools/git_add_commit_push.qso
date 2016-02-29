@@ -1,0 +1,12 @@
+#!/usr/bin/env qso
+
+my targets = $.ARGV
+targets.size or target.push(".")
+
+targets.each { |target|
+   Posix.fork({
+      target == "." or chdir(target)
+      posix::system("git status ; git add . ; git status ; git commit -m '...' ; git push")
+   })
+   .wait
+}
