@@ -1,0 +1,87 @@
+#!/usr/bin/env qso
+import Getopt
+
+class Tool_Ren {
+   our myname = re(".*\/([^/]+)$").to("$1[%d]" % [$.pid]).replace($.progname)
+
+   my usage = { |msg|
+      (msg.defined? and msg.length > 0).if {
+         print_error(msg)
+      }
+      cerr << ("Usage: %s old-file new-file\n" % myname)
+      exit(1)
+   }
+
+   function found_git { |dir|
+      re('''/*\z''').to('').replace(dir)
+      re('^/').m(dir) or { dir = "./" ~ dir }
+      while { dir.length } {
+         File(File::dircat(dir, ".git")).is_dir? and do { return dir }
+         re('''/+[^/]+\z''').to('').replace(dir).unless {
+            last
+         }
+      }
+      return undef
+   }
+
+
+   function main {
+      my option_dryrun = false
+      Getopt::GetOptions(
+        "n|dry-run" => &option_dryrun,
+      ) or die()
+      my old_file_name = $.ARGV.shift
+      my new_file_name = $.ARGV.shift // usage()
+      ($.ARGV.size) or usage()
+
+      File(old_file_name).exist? or do { usage(old_file_name ~ ": file not found") }
+      File(new_file_name).if_dir {
+         my f = re(".*\/").to('').replace(old_file_name)
+         re('/*\z').to("/" ~ f).subst(new_file_name)
+      }
+      File(new_file_name).exist? and do { usage(new_file_name ~ ": already exist") }
+
+      my old_dir = re('''[^/]+/*\z''').to('').replace(old_file)
+      old_dir.length or old_dir = '.'
+      File(old_dir).dir?.if {
+         old_dir ~= "/"
+      }{
+         re('''[^/]+/\z''').to('').s(old_dir);
+      }
+
+      File([old_dir, ".svn"])
+      .exist?.if({
+         my r @String;
+         do {
+            my svn = Posix.open_pipe("-|", {
+               cerr.dup2("/dev/null", O_WRONLY)
+               cin.dup2("/dev/null", O_RDONLY)
+               Posix.exec("svn", "st", "-v", old_file)
+            })
+            r = svn.read_line
+         }
+         if(r.defined) {
+            r.chomp
+            re('^[?I]').m(r).unless({
+               Posix.system("svn", "up")
+               Posix.system("svn", "rename", old_file, new_file)
+               exit()
+            })
+         }
+      })
+
+      found_git(old_dir)
+      .if {
+         Sys.system("git", "mv", old_file_name, new_file_name)
+         .if {
+            exit(0)
+         }
+      }
+
+      Sys.exec("mv", old_file_name, new_file_name)
+   }
+}
+
+Tool_Ren::main()
+
+
