@@ -1,0 +1,4 @@
+function f1 { |a,b,c| a / b + c }
+
+ok: my_div(35, 5, 3) == 10
+ok: my_div(35, c => 3, b => 5) == 10
