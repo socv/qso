@@ -1,0 +1,22 @@
+
+our count_total = 0;
+our count_ok = 0;
+our count_ng = 0;
+block OK(f) {
+   (f).if {
+      P: "test " ~ count_total ~ ": ok"
+      count_ok++;
+   } {
+      P: "test " ~ count_total ~ ": ng"
+      count_ng++;
+   }
+   count_total++;
+}
+block IS(a,b) {
+   OK(a == b)
+#   P: "left hand = " + a.to_str
+#   P: "right hand = " + b.to_str
+}
+function end_of_test {
+   P: "end of test: ok=" ~ count_ok ~ " / ng=" ~ count_ng
+}

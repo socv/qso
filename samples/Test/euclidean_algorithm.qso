@@ -1,12 +1,24 @@
+#!/usr/bin/env qso
+import: "Test"
 
-function euclidean_algorithm { |m@Int,n@Int|
-   (m >= n) or swap(m, n)
-
+function euclidean_algorithm(m,n) {
    (n == 0).if(
      { m }
      { euclidean_algorithm(n, m % n) }
    )
 }
 
-ok: euclidean_algorithm(15, 12) == 3
-ok: euclidean_algorithm(2000, 2048) == 16
+function euclidean_algorithm2(m,n) {
+   { n != 0 }.while {
+      my r = m % n
+      m = n
+      n = r
+   }
+   m;
+}
+
+IS: euclidean_algorithm(15, 12) , 3
+IS: euclidean_algorithm(2000, 2048) , 16
+IS: euclidean_algorithm2(15, 12) , 3
+IS: euclidean_algorithm2(2000, 2048) , 16
+end_of_test();
