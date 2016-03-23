@@ -1,0 +1,58 @@
+#!/usr/bin/env qso
+import: "Test"
+
+IS: 3+4, 7
+IS: 3-4, -1
+IS: 3*4, 12
+IS: 3*-4, -12
+IS: -3*-4, 12
+IS: -3*4, -12
+IS: 128 / 2, 64
+IS: 2 / 128, 0
+IS: 7 % 4, 3
+IS: 2**3, 8
+IS: 1 << 2, 4
+IS: 4 >> 2, 1
+IS: 0x0c & 0xa, 8
+IS: 0b111000 & 0b101010, 0b101000
+IS: 0b111000 | 0b101010, 0b111010
+IS: 0b111000 ^ 0b101010, 0b010010
+
+
+OK: (65).chr == "A"
+OK: (4).denominator == 1
+
+OK: (4).even?
+OK: !(5).even?
+OK: !(4).odd?
+OK: (5).odd?
+
+IS: (14).gcd(21) , 7
+IS: (14).lcm(21) , 42
+
+OK: (200).int?
+
+my a = 200;
+IS: ++a, 201
+IS: a++, 201
+IS: a, 202
+IS: --a, 201
+IS: a--, 201
+IS: a, 200
+
+
+OK: (300).numerator == 300
+
+my times1 = "";
+(5).times {|n| times1 += String(n) + ";" }
+IS: times1, "0;1;2;3;4;"
+
+my downto1 = "";
+(5).downto(3) {|n| downto1 += String(n) + ";" }
+OK: downto1 == "5;4;3;"
+
+my upto1 = "";
+(6).upto(8) {|n| upto1 += String(n) + ";" }
+OK: upto1 == "6;7;8;"
+
+end_of_test()
